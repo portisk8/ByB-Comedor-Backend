@@ -3,13 +3,9 @@ import os
 import pyodbc
 
 server = 'localhost'
-database = 'test'
-usiario = 'sa'
-password = '123456'
-
-
-
-
+database = 'ByB_Comedor'
+usiario = 'asd'
+password = 'asd'
 
 
 

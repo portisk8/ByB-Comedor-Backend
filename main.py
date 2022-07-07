@@ -1,16 +1,18 @@
+import email
 from conexion import conn
 
 try:
     print("Ingrese usuario y contraseña para registrarse:")
     usuario = input("Usuario: ")
     contraseña = input("Contraseña: ")
+    email = input("Email: ")
 
     print("Su usuario es: " + usuario)
     print("Su contraseña es: " + contraseña)
 
     with conn.cursor() as cursor:
 
-        consulta = "INSERT INTO usuarios (usuario, contraseña) VALUES ('" + usuario + "', '" + contraseña + "')"
+        consulta = "INSERT INTO Usuarios (Username, Email, Password, Salt) VALUES ('" + usuario + "', '" + email + "','" + contraseña + "', '" + "1" + "')"
         cursor.execute(consulta)
 
     #Logeo
@@ -20,7 +22,7 @@ try:
         contraseñaL = input("Contraseña: ")
 
         with conn.cursor() as cursor:
-            consulta = "SELECT * FROM usuarios WHERE usuario = '" + usuarioL + "' AND contraseña = '" + contraseñaL + "'"
+            consulta = "SELECT * FROM Usuarios WHERE usuario = '" + usuarioL + "' AND contraseña = '" + contraseñaL + "'"
             cursor.execute(consulta)
             resultado = cursor.fetchone()
             if resultado is None:
