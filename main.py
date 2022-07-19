@@ -6,7 +6,7 @@ try:
     usuario = input("Usuario: ")
     contraseña = input("Contraseña: ")
     email = input("Email: ")
-
+    intentos = 0
     print("Su usuario es: " + usuario)
     print("Su contraseña es: " + contraseña)
 
@@ -17,23 +17,27 @@ try:
 
     #Logeo
     while True:
-        print("Ingrese usuario y contraseña para iniciar sesion:")
+        print("Ingrese usuario y contraseña para iniciar sesión:")
         usuarioL = input("Usuario: ")
         contraseñaL = input("Contraseña: ")
 
         with conn.cursor() as cursor:
-            consulta = "SELECT * FROM Usuarios WHERE usuario = '" + usuarioL + "' AND contraseña = '" + contraseñaL + "'"
+            consulta = "SELECT * FROM Usuarios WHERE Username = '" + usuarioL + "' AND Password = '" + contraseñaL + "'"
             cursor.execute(consulta)
             resultado = cursor.fetchone()
             if resultado is None:
-                print("Usuario o contraseña incorrectos")
+                intentos = intentos + 1
+                if intentos == 3:
+                    print("Ha excedido el número de intentos.")
+                    break
+                print("Usuario o contraseña incorrectos.")
             else:
                 print("Bienvenido " + usuarioL)
                 break    
 except Exception as e:
-    print(e)
+    print("Error: " + str(e))
     exit()
 finally:
     conn.close()
-    print("Conexion cerrada")
+    print("Conexión cerrada.")
     exit()

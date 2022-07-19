@@ -4,7 +4,7 @@ import pyodbc
 
 server = 'localhost'
 database = 'ByB_Comedor'
-usiario = 'asd'
+usuario = 'asd'
 password = 'asd'
 
 
@@ -12,7 +12,7 @@ password = 'asd'
 
 
 try:
-    conn = pyodbc.connect('DRIVER={ODBC Driver 17 for SQL Server};SERVER='+server+';DATABASE='+database+';UID='+usiario+';PWD='+ password)
+    conn = pyodbc.connect('DRIVER={ODBC Driver 17 for SQL Server};SERVER='+server+';DATABASE='+database+';UID='+usuario+';PWD='+ password)
     print('Conexion exitosa')
 except:
     print('Conexion fallida')
