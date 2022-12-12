@@ -2,6 +2,8 @@ from flask import Flask, request, render_template, redirect
 import os
 import pyodbc
 
+
+
 server = 'localhost'
 database = 'ByB_Comedor'
 usuario = 'asd'

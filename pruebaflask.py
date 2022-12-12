@@ -1,35 +1,46 @@
 
-from flask import Flask, jsonify, render_template, request
-from config import config
-from flask_cors import CORS, cross_origin
+from flask import Flask, jsonify, request
+from conexion import conn
+app = Flask(__name__)
 
-app = Flask(__name__, static_url_path='/static')
-app.config['SECRET_KEY'] = 'the quick brown fox jumps over the lazy   dog'
-#cors = CORS(app, resources={r"/foo": {"origins": "http://localhost:port"}})
 
-@app.route('/', methods=['GET']) 
-def index():
-    return render_template('index.html')
-
-@app.route('/articulos', methods=['POST'])
-def articulos():
-    data = request.get_json()
-    return jsonify(data)
-
-@app.route('/api', methods=['POST'])
-def api():
-    data = request.get_json()
-    return jsonify(data)
-
-@app.route('/api/user/login', methods=['POST'])
-@cross_origin(origin='http://localhost:3000/',headers=['Content- Type','Authorization'])
+@app.route('/usuarios/login', methods=['POST'])
 def login():
-    response = jsonify(request.get_json())
-    response.headers.add('Access-Control-Allow-Origin', '*')
-    return response
+    request_data = request.get_json()
+
+    #Extraer datos del JSON
+    email = request_data['Email']
+    contraseña = request_data['Password']
+
+    with conn.cursor() as cursor:
+        consulta = "SELECT * FROM Usuarios WHERE Email = '" + email + "' AND Password = '" + contraseña + "'"
+        cursor.execute(consulta)
+        resultado = cursor.fetchone()
+        if resultado is None:
+            return "Usuario o contraseña incorrectos."
+        else:
+            return ("Bienvenido " + email)
 
 
+@app.route('/usuarios/reg', methods=['POST'])
+def reg():
+    request_data = request.get_json()
+    
+    #Extraer datos del JSON
+    usuario = request_data['Username']
+    contraseña = request_data['Password']
+    email = request_data['Email']
 
-if __name__ == '__main__':
-    app.config.from_object(config['development'])
-    app.run()
+
+    with conn.cursor() as cursor:
+        consulta = "INSERT INTO Usuarios (Username, Email, Password, Salt) VALUES ('" + usuario + "', '" + email + "','" + contraseña + "', '" + "1" + "')"
+        cursor.execute(consulta)
+    
+    return "Usuario registrado correctamente."
+
+
+@app.route('/')
+def home():
+    return 'Hello World!'
+
+app.run(port=5000)
