@@ -58,10 +58,10 @@ def reg():
     email = request_data['Email']
     # Encriptar contraseña
     
-
+    contra = generate_password_hash(contraseña)
 
     with conn.cursor() as cursor:
-        consulta = "INSERT INTO Usuarios (Username, Email, Password, Salt) VALUES ('" + usuario + "', '" + email + "','" + contraseña + "', '" + "1" + "')"
+        consulta = "INSERT INTO Usuarios (Username, Email, Password, Salt) VALUES ('" + usuario + "', '" + email + "','" + contra + "', '" + "1" + "')"
         cursor.execute(consulta)
     
     return "Usuario registrado correctamente."
