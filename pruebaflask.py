@@ -3,8 +3,8 @@ from flask import Flask, jsonify, request
 from conexion import conn
 from flask_login import login_required
 app = Flask(__name__)
-import bcrypt
-import os
+
+from werkzeug.security import check_password_hash, generate_password_hash
 #Models
 from models.ModelUser import ModelUser
 auth = False
@@ -20,22 +20,31 @@ def login():
         #Extraer datos del JSON
         email = request_data['Email']
         contra = request_data['Password']
-        print(email)
-        user = User("asd",email, contra)
-        print(user.email + " " + user.password)
-        logged_user = ModelUser.login(conn, user)
-        if logged_user != None:
+        logged_user = False
+
+        try:
+            with conn.cursor() as cursor:
+                consulta = "SELECT * FROM Usuarios WHERE Email = '" + email + "'"
+                cursor.execute(consulta)
+                resultado = cursor.fetchone()
+                print(resultado[3])
+                if resultado == None:
+                    logged_user = False
+                else:
+                    print("Llegue aca")
+                    if check_password_hash(resultado[3], contra):
+                        logged_user = True
+                    else:
+                        logged_user = False
+                print("Es: " + str(logged_user))
+        except Exception as e:
+            print(e)
+            return "Usuario o contraseña incorrectos."
+        
+        if logged_user == True:
             return "Bienvenido " + email
         else:
             return "Usuario o contraseña incorrectos."
-        # with conn.cursor() as cursor:
-        #     consulta = "SELECT * FROM Usuarios WHERE Email = '" + email + "' AND Password = '" + contraseña + "'"
-        #     cursor.execute(consulta)
-        #     resultado = cursor.fetchone()
-        #     if resultado is None:
-        #         return "Usuario o contraseña incorrectos."
-        #     else:
-        #         return ("Bienvenido " + email)
     else:
         return "Error en la consulta."
 
