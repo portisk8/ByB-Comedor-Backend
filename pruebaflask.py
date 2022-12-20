@@ -38,7 +38,7 @@ def login():
         elif logged_user.password == False:
             return "Usuario o contraseña incorrectos."
         else:
-            return "Error inesperado."
+            return "Usuario o contraseña incorrectos."
     else:
         return "Error en la consulta."
 
@@ -55,8 +55,7 @@ def reg():
         contra = generate_password_hash(contraseña)
 
         with conn.cursor() as cursor:
-            consulta = "INSERT INTO Usuarios (Username, Email, Password, Salt) VALUES ('" + usuario + "', '" + email + "','" + contra + "', '" + "1" + "')"
-            cursor.execute(consulta)
+            cursor.execute("INSERT INTO Usuarios (Username, Email, Password, Salt) VALUES (?,?,?,?)",(usuario, email, contra, "1",))
         
         return "Usuario registrado correctamente."
     else:
@@ -80,13 +79,13 @@ def carga_comedores():
         return "Error en la consulta."
 
 @app.route('/comedores/<int:id>', methods=['GET', 'PUT', 'DELETE'])
-# @login_required
+@login_required
 def carga_comedor(id):
     #-----------------GET-----------------#
     if request.method == 'GET':
         try:
             with conn.cursor() as cursor:
-                cursor.execute("SELECT * FROM Comedores WHERE ComedorId = '" + str(id) + "'")
+                cursor.execute("SELECT * FROM Comedores WHERE ComedorId = ?" , (id,))
                 resultado = cursor.fetchone()
                 if resultado == None:
                     return "No existe el comedor."
@@ -134,7 +133,7 @@ def carga_comedor(id):
 def crea_comedor():
     request_data = request.get_json()
     with conn.cursor() as cursor:
-        cursor.execute("INSERT INTO Comedores (Descripcion, Titulo, DireccionCalle, DireccionNumero) VALUES ('" + request_data['Desc'] + "', '" + request_data['Titulo'] + "','" + request_data['DireccionCalle'] + "', '" + request_data['DireccionNumero'] + "')")
+        cursor.execute("INSERT INTO Comedores (Descripcion, Titulo, DireccionCalle, DireccionNumero) VALUES (?,?,?,?)", (request_data['Desc'], request_data['Titulo'], request_data['DireccionCalle'], request_data['DireccionNumero'],))
     return "Comedor creado correctamente."
 
 
@@ -143,8 +142,7 @@ def crea_comedor():
 def verificarUsuario(email, contra):
     try:
         with conn.cursor() as cursor:
-            consulta = "SELECT * FROM Usuarios WHERE Email = '" + email + "'"
-            cursor.execute(consulta)
+            cursor.execute("SELECT * FROM Usuarios WHERE Email = ?", (email,))
             resultado = cursor.fetchone()
             print(resultado)
             if resultado == None:
@@ -165,8 +163,7 @@ def verificarUsuario(email, contra):
 def verificarUnicoUsuario(email, username):
     try:
         with conn.cursor() as cursor:
-            consulta = "SELECT * FROM Usuarios WHERE Email = '" + email + "' OR Username = '" + username + "'"
-            cursor.execute(consulta)
+            cursor.execute("SELECT * FROM Usuarios WHERE Email = ? OR Username = ?", (email, username,))
             resultado = cursor.fetchone()
             if resultado == None:
                 return True
@@ -179,8 +176,8 @@ def verificarUnicoUsuario(email, username):
 def get_by_id(id):
     try:
         with conn.cursor() as cursor:
-            consulta = "SELECT * FROM Usuarios WHERE UsuarioId = '" + id + "'"
-            cursor.execute(consulta)
+            
+            cursor.execute("SELECT * FROM Usuarios WHERE UsuarioId = ?", (id,))
             resultado = cursor.fetchone()
             if resultado == None:
                 return None
