@@ -86,5 +86,21 @@ namespace Feature.Api.Controllers
             }
         }
 
+        [HttpPost]
+        [Route("historial/buscar")]
+        public async Task<IActionResult> PersonaHistorialBuscar([FromBody] PersonaFiltro filtro)
+        {
+            try
+            {
+                var resultado = await _personaBusiness.PersonaHistorialBuscarAsync(filtro);
+                return Ok(resultado);
+            }
+            catch (Exception ex)
+            {
+                _logger.Error($"[PersonaController] PersonaHistorialBuscar > {ex.Message}");
+                return BadRequest(ex.Message);
+            }
+        }
+
     }
 }

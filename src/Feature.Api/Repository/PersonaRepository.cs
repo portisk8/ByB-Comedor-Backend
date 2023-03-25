@@ -24,7 +24,6 @@ namespace Feature.Api.Repository
         }
         public async Task<List<Persona>> PersonaBuscarAsync(PersonaFiltro filtro)
         {
-
             const string SQL_Persona_Buscar = "[dbo].[Persona_Buscar]";
             var param = new Dictionary<string, object?>
             {
@@ -119,6 +118,32 @@ namespace Feature.Api.Repository
                                             );
 
                 return data.FirstOrDefault();
+            }
+        }
+
+        public async Task<List<PersonaHistorial>> PersonaHistorialBuscarAsync(PersonaFiltro filtro)
+        {
+            const string SQL_PersonaHistorial_Buscar = "[dbo].[PersonaHistorial_Buscar]";
+            var param = new Dictionary<string, object?>
+            {
+                { "@PersonaId", filtro.PersonaId },
+                { "@FechaDesde", filtro.FechaDesde },
+                { "@FechaHasta", filtro.FechaHasta },
+                { "@PalabrasABuscar", filtro.PalabrasABuscar },
+                { "@ColumnaAOrdenar", filtro.ColumnaAOrdenar },
+                { "@PageIndex", filtro.PageIndex },
+                { "@PageSize", filtro.PageSize }
+            };
+
+            using (var conn = GetConnection())
+            {
+                var data = await conn.ExecuteQueryAsync<PersonaHistorial>(
+                                            commandText: SQL_PersonaHistorial_Buscar,
+                                            commandType: System.Data.CommandType.StoredProcedure,
+                                            param: param
+                                            );
+
+                return data.ToList();
             }
         }
     }

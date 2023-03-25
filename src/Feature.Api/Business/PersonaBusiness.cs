@@ -42,5 +42,10 @@ namespace Feature.Api.Business
         {
             return await _personaRepository.PersonaObtenerAsync(personaId);
         }
+
+        public async Task<List<PersonaHistorial>> PersonaHistorialBuscarAsync(PersonaFiltro filtro)
+        {
+            return await _personaRepository.PersonaHistorialBuscarAsync(filtro);
+        }
     }
 }
