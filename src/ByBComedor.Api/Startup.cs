@@ -1,5 +1,6 @@
 ﻿using Autofac;
 using Autofac.Extensions.DependencyInjection;
+using Feature.Api.Config;
 using Feature.Auth.Authentication;
 using Feature.Auth.Config;
 using Feature.Auth.Middleware;
@@ -57,7 +58,8 @@ namespace ByBComedor.Api
             services.AddSingleton<Serilog.ILogger>(logger);
 
             var authConfig = AuthConfig.Build(Configuration);
-
+            var apiConfig = ApiConfig.Build(Configuration);
+            
             //services.AddAuthentication("Bearer")
             //    .AddScheme<AuthenticationOptions, AuthenticationHandler>("Bearer", null);
             var key = Encoding.UTF8.GetBytes(authConfig.SecretKey);
@@ -86,12 +88,14 @@ namespace ByBComedor.Api
             //});
             //Se registran los Configs de Features
             services.AddSingleton(authConfig);
+            services.AddSingleton(apiConfig);
 
             // Create the container builder.
             var builder = new ContainerBuilder();
 
             //Se registran los Autofacs de Features
             builder.RegisterModule(new Feature.Auth.AutofacModule() { AuthConfig = authConfig });
+            builder.RegisterModule(new Feature.Api.AutofacModule() { Config = apiConfig });
 
             builder.Populate(services);
 

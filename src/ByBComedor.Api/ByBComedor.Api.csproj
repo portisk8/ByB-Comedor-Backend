@@ -11,6 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Feature.Api\Feature.Api.csproj" />
     <ProjectReference Include="..\Feature.Auth\Feature.Auth.csproj" />
   </ItemGroup>
 
