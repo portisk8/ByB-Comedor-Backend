@@ -102,5 +102,21 @@ namespace Feature.Api.Controllers
             }
         }
 
+        [HttpPost]
+        [Route("historial/guardar")]
+        public async Task<IActionResult> PersonaHistorialGuardar([FromBody] PersonaHistorialDTO dto)
+        {
+            try
+            {
+                var resultado = await _personaBusiness.PersonaHistorialGuardarAsync(dto);
+                return Ok(resultado);
+            }
+            catch (Exception ex)
+            {
+                _logger.Error($"[PersonaController] PersonaHistorialGuardar > {ex.Message}");
+                return BadRequest(ex.Message);
+            }
+        }
+
     }
 }

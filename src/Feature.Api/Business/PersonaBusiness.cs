@@ -47,5 +47,10 @@ namespace Feature.Api.Business
         {
             return await _personaRepository.PersonaHistorialBuscarAsync(filtro);
         }
+
+        public async Task<GenericResponse> PersonaHistorialGuardarAsync(PersonaHistorialDTO dto)
+        {
+            return await _personaRepository.PersonaHistorialGuardarAsync(dto);
+        }
     }
 }

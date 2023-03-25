@@ -146,5 +146,31 @@ namespace Feature.Api.Repository
                 return data.ToList();
             }
         }
+
+        public async Task<GenericResponse> PersonaHistorialGuardarAsync(PersonaHistorialDTO dto)
+        {
+            const string SQL_PersonaHistorial_Guardar = "[dbo].[PersonaHistorial_Guardar]";
+            var param = new Dictionary<string, object>
+            {
+                { "@PersonaId", dto.PersonaId },
+                { "@Edad", dto.Edad },
+                { "@Peso", dto.Peso },
+                { "@Altura", dto.Altura },
+                { "@CinturaCircunferencia", dto.CinturaCircunferencia },
+                { "@Diagnostico", dto.Diagnostico },
+                { "@UsuarioId", dto.UsuarioId }
+            };
+
+            using (var conn = GetConnection())
+            {
+                var data = await conn.ExecuteQueryAsync<GenericResponse>(
+                                            commandText: SQL_PersonaHistorial_Guardar,
+                                            commandType: System.Data.CommandType.StoredProcedure,
+                                            param: param
+                                            );
+
+                return data.FirstOrDefault();
+            }
+        }
     }
 }
