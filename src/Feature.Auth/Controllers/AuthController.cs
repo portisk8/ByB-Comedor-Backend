@@ -42,6 +42,21 @@ namespace Feature.Auth.Controllers
                 return BadRequest(ex.Message);
             }
         }
+        [HttpGet]
+        [Route("token/refresh")]
+        public async Task<IActionResult> RefreshToken()
+        {
+            try
+            {
+                var resultado = await _authBusiness.RefreshTokenAsync(CurrentUser.UserId);
+                return Ok(resultado);
+            }
+            catch (Exception ex)
+            {
+                _logger.Error($"[AuthController] RefreshToken > {ex.Message}");
+                return BadRequest(ex.Message);
+            }
+        }
 
         [HttpGet]
         [AllowAnonymous]

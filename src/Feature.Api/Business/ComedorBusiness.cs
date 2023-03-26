@@ -3,6 +3,7 @@ using Feature.Api.Entities;
 using Feature.Api.Entities.Filtros;
 using Feature.Api.Repository;
 using Feature.Core.AuthUser;
+using Feature.Core.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -30,6 +31,11 @@ namespace Feature.Api.Business
         public async Task<List<Comedor>> ComedorBuscarASync(ComedorFiltro filtro)
         {
             return await _comedorRepository.ComedorBuscarASync(filtro);
+        }
+
+        public async Task<GenericResponse> ComedorCambiarAsync(int comedorId, int userId)
+        {
+            return await _comedorRepository.ComedorCambiarAsync(comedorId, userId);
         }
     }
 }

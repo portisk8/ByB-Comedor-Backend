@@ -2,6 +2,7 @@
 using Feature.Api.Entities;
 using Feature.Api.Entities.Filtros;
 using Feature.Core;
+using Feature.Core.Entities;
 using RepoDb;
 
 namespace Feature.Api.Repository
@@ -38,5 +39,28 @@ namespace Feature.Api.Repository
                 return data.ToList();
             }
         }
+
+        public async Task<GenericResponse> ComedorCambiarAsync(int comedorId, int userId)
+        {
+            const string SQL_UsuarioPropiedadValor_Guardar = "[perfil].[UsuarioPropiedadValor_Guardar]";
+            var param = new Dictionary<string, object>
+            {
+                { "@PropiedadNombre", "EntidadIdActual" },
+                { "@UsuarioId", userId },
+                { "@Valor", comedorId }
+            };
+
+            using (var conn = GetConnection())
+            {
+                var data = await conn.ExecuteQueryAsync<GenericResponse>(
+                                            commandText: SQL_UsuarioPropiedadValor_Guardar,
+                                            commandType: System.Data.CommandType.StoredProcedure,
+                                            param: param
+                                            );
+
+                return data.FirstOrDefault();
+            }
+        }
+        
     }
 }

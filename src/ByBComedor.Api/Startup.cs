@@ -4,11 +4,13 @@ using Feature.Api.Config;
 using Feature.Auth.Authentication;
 using Feature.Auth.Config;
 using Feature.Auth.Middleware;
+using Feature.Core.Config;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Serilog;
 using Serilog.Exceptions;
+using System.Globalization;
 using System.IdentityModel.Tokens.Jwt;
 using System.Text;
 
@@ -18,6 +20,7 @@ namespace ByBComedor.Api
     {
         public IConfiguration Configuration { get; }
         public IContainer ApplicationContainer { get; private set; }
+        public GeneralConfig GeneralConfig { get; set; }
 
 
         public Startup(IConfiguration configuration)
@@ -28,25 +31,28 @@ namespace ByBComedor.Api
             JwtSecurityTokenHandler.DefaultOutboundClaimTypeMap.Clear();
 
             Configuration = configuration;
+            GeneralConfig = new GeneralConfig
+            {
+                CorsUrls = Configuration["GeneralConfig:CorsUrls"]?.Split(";")
+            };
         }
 
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
+            var allowedOrigins = GeneralConfig.CorsUrls;
+
             services.AddLogging();
             services.AddResponseCaching();
 
             services.AddControllers();
-            services.AddCors(options =>
-            {
-                options.AddPolicy("CorsPolicy",
-                    builder =>
-                    {
-                        builder.AllowAnyMethod().WithOrigins("http://localhost:3000")
-                            .AllowCredentials();
-                    });
 
-            }
-            );
+            services.AddCors(o => o.AddPolicy("CorsPolicy", builders =>
+            {
+                builders.WithOrigins(allowedOrigins.ToArray())
+                       .AllowAnyMethod()
+                       .AllowAnyHeader()
+                       .AllowCredentials();
+            }));
 
             services.AddMemoryCache();
 
@@ -132,7 +138,7 @@ namespace ByBComedor.Api
             //});
 
             app.UseRouting();
-            app.UseCors();
+            app.UseCors("CorsPolicy");
 
             app.UseAuthentication();
             app.UseAuthorization();

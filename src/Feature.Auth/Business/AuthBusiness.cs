@@ -130,7 +130,8 @@ namespace Feature.Auth.Business
                     new Claim("name", user.Name, ClaimValueTypes.String),
                     new Claim("lastName", user.LastName, ClaimValueTypes.String),
                     //COMEDOR
-                    new Claim("comedorId", user.ComedorId?.ToString(), ClaimValueTypes.Integer32)
+                    new Claim("comedorId", user.ComedorId?.ToString(), ClaimValueTypes.Integer32),
+                    new Claim("comedorDescripcion", user.ComedorDescripcion, ClaimValueTypes.String)
 
                 }),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key),
@@ -140,6 +141,20 @@ namespace Feature.Auth.Business
             var token = tokenHandler.CreateToken(tokenDescriptor);
 
             return tokenHandler.WriteToken(token);
+        }
+
+        public async Task<UserResponse> RefreshTokenAsync(int userId)
+        {
+            var user = await _authRepository.GetUserByUserIdAsync(userId);
+
+            var userResponse = new UserResponse()
+            {
+                UserName = user.UserName,
+                UserId = user.UserId,
+                Token = GenerateJwt(user)
+            };
+
+            return userResponse;
         }
         #endregion
     }

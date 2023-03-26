@@ -38,6 +38,61 @@ namespace Feature.Auth.Repository
 
         }
 
+        public async Task<User> GetUserByUserIdAsync(int userId)
+        {
+            const string SQL_membresia_Usuario_Obtener = "[membresia].[Usuario_Obtener]";
+            var param = new Dictionary<string, object>
+            {
+                { "@UsuarioId", userId }
+            };
+
+            using (var conn = GetConnection())
+            {
+                var data = await conn.ExecuteQueryAsync<dynamic>(
+                                            commandText: SQL_membresia_Usuario_Obtener,
+                                            commandType: System.Data.CommandType.StoredProcedure,
+                                            param: param
+                                            );
+                if (data.Any())
+                {
+                    var dataUser = data.First();
+                    var user = new User()
+                    {
+                        UserId = dataUser.UsuarioId,
+                        UserName = dataUser.NombreUsuario,
+                        Name = dataUser.Nombre,
+                        LastName = dataUser.Apellido,
+                        Email = dataUser.Email,
+                        Membresia = new Membresia()
+                        {
+                            UsuarioId = dataUser.UsuarioId,
+                            Salt = dataUser.Salt,
+                            Password = dataUser.Password,
+                            Verificado = dataUser.Verificado,
+                            Verificador = dataUser.Verificador,
+                            FechaCaducidad = dataUser.FechaCaducidad,
+                            FechaCreacion = dataUser.FechaCreacion,
+                            FechaUltimoLogin = dataUser.FechaUltimoLogin,
+                            Habilitado = dataUser.Habilitado,
+                            Bloqueado = dataUser.Bloqueado,
+                            PreguntaSecreta = dataUser.PreguntaSecreta,
+                            PreguntaSecretaRespuesta = dataUser.PreguntaSecretaRespuesta,
+                            IntentoFallidoLoginCantidad = dataUser.IntentoFallidoLoginCantidad,
+                            IntentoFallidoLoginVentana = dataUser.IntentoFallidoLoginVentana,
+                            IntentoFallidoPreguntaCantidad = dataUser.IntentoFallidoPreguntaCantidad,
+                            IntentoFallidoPreguntaVentana = dataUser.IntentoFallidoPreguntaVentana,
+                            UsuarioIdUltimaModificacion = dataUser.UsuarioIdUltimaModificacion
+                        },
+                        //COMEDOR
+                        ComedorId = dataUser.ComedorId,
+                        ComedorDescripcion = dataUser.ComedorDescripcion,
+                    };
+                    return user;
+                }
+                return null;
+            }
+        }
+
         public async Task<User> GetUserByUsernameAsync(string username)
         {
             const string SQL_membresia_Usuario_Obtener = "[membresia].[Usuario_Obtener]";
@@ -83,6 +138,7 @@ namespace Feature.Auth.Repository
                         },
                         //COMEDOR
                         ComedorId= dataUser.ComedorId,
+                        ComedorDescripcion= dataUser.ComedorDescripcion,
                     };
                     return user;
                 }

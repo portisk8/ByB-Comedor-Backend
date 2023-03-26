@@ -9,5 +9,6 @@ namespace Features.Auth.Comedor.Entities
     public class UserComedor
     {
         public int? ComedorId { get; set; }
+        public string ComedorDescripcion { get; set; }
     }
 }

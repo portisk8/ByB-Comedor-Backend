@@ -35,6 +35,44 @@ namespace Feature.Api.Controllers
                 return BadRequest(ex.Message);
             }
         }
-        
+
+        [HttpGet]
+        [Route("listar")]
+        public async Task<IActionResult> ComedorListar()
+        {
+            var filtro = new ComedorFiltro()
+            {
+                PageIndex = 1,
+                PageSize = Int32.MaxValue,
+                UsuarioId = CurrentUser.UserId
+            };
+            try
+            {
+                var resultado = await _comedorBusiness.ComedorBuscarASync(filtro);
+                return Ok(resultado);
+            }
+            catch (Exception ex)
+            {
+                _logger.Error($"[ComedorController] ComedorBuscar > {ex.Message}");
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpGet]
+        [Route("{comedorId}/cambiar")]
+        public async Task<IActionResult> ComedorCambiar(int comedorId)
+        {
+            try
+            {
+                var resultado = await _comedorBusiness.ComedorCambiarAsync(comedorId, CurrentUser.UserId);
+                return Ok(resultado);
+            }
+            catch (Exception ex)
+            {
+                _logger.Error($"[ComedorController] ComedorBuscar > {ex.Message}");
+                return BadRequest(ex.Message);
+            }
+        }
+
     }
 }
