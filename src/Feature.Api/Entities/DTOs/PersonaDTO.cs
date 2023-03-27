@@ -13,13 +13,13 @@ namespace Feature.Api.Entities.DTOs
         public string? Apellido { get; set; }
         public DateTime? FechaNacimiento { get; set; }
         public int? DocumentoTipoId { get; set; }
-        public string? Documento { get; set; }
+        public string? DocumentoNumero { get; set; }
         public int? SexoTipoId { get; set; }
         public int? ComedorId { get; set; }
         public int? Edad { get; set; }
         public string DireccionCalle { get; set; }
         public int? DireccionNumero { get; set; }
-        public int? PersonaTutorId { get; set; }
+        public int? PersonaIdTutor { get; set; }
         public string TelefonoNumero { get; set; }
         public int? UsuarioId { get; set; }
 

@@ -57,13 +57,13 @@ namespace Feature.Api.Repository
                 { "@Apellido", dto.Apellido },
                 { "@FechaNacimiento", dto.FechaNacimiento },
                 { "@DocumentoTipoId", dto.DocumentoTipoId },
-                { "@Documento", dto.Documento },
+                { "@Documento", dto.DocumentoNumero },
                 { "@SexoTipoId", dto.SexoTipoId },
                 { "@ComedorId", dto.ComedorId },
                 { "@Edad", dto.Edad },
                 { "@DireccionCalle", dto.DireccionCalle },
                 { "@DireccionNumero", dto.DireccionNumero },
-                { "@PersonaTutorId", dto.PersonaTutorId },
+                { "@PersonaTutorId", dto.PersonaIdTutor },
                 { "@TelefonoNumero", dto.TelefonoNumero },
                 { "@UsuarioId", dto.UsuarioId }
             };

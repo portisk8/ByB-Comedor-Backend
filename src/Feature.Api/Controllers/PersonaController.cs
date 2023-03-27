@@ -108,6 +108,7 @@ namespace Feature.Api.Controllers
         {
             try
             {
+                dto.UsuarioId = CurrentUser.UserId;
                 var resultado = await _personaBusiness.PersonaHistorialGuardarAsync(dto);
                 return Ok(resultado);
             }

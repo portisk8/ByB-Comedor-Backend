@@ -27,5 +27,6 @@ namespace Feature.Api.Entities
         public string SexoTipoDescripcion { get; set; }
         public string SexoTipoDescripcionCorta { get; set; }
         public DateTime? FechaNacimiento { get; set; }
+        public bool EsInfante { get; set; }
     }
 }
