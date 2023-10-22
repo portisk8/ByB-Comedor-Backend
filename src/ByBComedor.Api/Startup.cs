@@ -128,7 +128,7 @@ namespace ByBComedor.Api
             }
             app.UseResponseCaching();
 
-            app.UseHttpsRedirection();
+            //app.UseHttpsRedirection();
 
             //app.UseSwagger();
 
@@ -149,9 +149,6 @@ namespace ByBComedor.Api
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
-
-                //endpoints.MapHub<TurnoHub>("/signalr/turnos")
-                //    .RequireCors("TurneroCorsPolicy");
             });
             appLifetime.ApplicationStopped.Register(() => this.ApplicationContainer.Dispose());
         }
