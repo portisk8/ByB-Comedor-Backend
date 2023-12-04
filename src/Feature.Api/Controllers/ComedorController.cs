@@ -1,4 +1,5 @@
 ﻿using Feature.Api.Business;
+using Feature.Api.Entities.DTOs;
 using Feature.Api.Entities.Filtros;
 using Feature.Core.Controllers;
 using Microsoft.AspNetCore.Mvc;
@@ -70,6 +71,23 @@ namespace Feature.Api.Controllers
             catch (Exception ex)
             {
                 _logger.Error($"[ComedorController] ComedorBuscar > {ex.Message}");
+                return BadRequest(ex.Message);
+            }
+        }
+
+
+        [HttpPost]
+        [Route("guardar")]
+        public async Task<IActionResult> ComedorGuardar([FromBody] ComedorDTO dto)
+        {
+            try
+            {
+                var resultado = await _comedorBusiness.ComedorGuardarAsync(dto);
+                return Ok(resultado);
+            }
+            catch (Exception ex)
+            {
+                _logger.Error($"[ComedorController] ComedorGuardar > {ex.Message}");
                 return BadRequest(ex.Message);
             }
         }

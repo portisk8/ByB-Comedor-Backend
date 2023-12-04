@@ -1,5 +1,6 @@
 ﻿using Feature.Api.Config;
 using Feature.Api.Entities;
+using Feature.Api.Entities.DTOs;
 using Feature.Api.Entities.Filtros;
 using Feature.Core;
 using Feature.Core.Entities;
@@ -61,6 +62,30 @@ namespace Feature.Api.Repository
                 return data.FirstOrDefault();
             }
         }
-        
+
+
+        public async Task<GenericResponse?> ComedorGuardarAsync(ComedorDTO dto)
+        {
+            const string SQL_Comedor_Guardar = "[dbo].[Comedor_Guardar]";
+            var param = new Dictionary<string, object?>
+            {
+                { "@ComedorId", dto.ComedorId },
+                { "@Descripcion", dto.Descripcion },
+                { "@Titulo", dto.Titulo },
+                { "@DireccionCalle", dto.DireccionCalle },
+                { "@DireccionNumero", dto.DireccionNumero }
+            };
+
+            using (var conn = GetConnection())
+            {
+                var data = await conn.ExecuteQueryAsync<GenericResponse>(
+                                            commandText: SQL_Comedor_Guardar,
+                                            commandType: System.Data.CommandType.StoredProcedure,
+                                            param: param
+                                            );
+
+                return data.FirstOrDefault();
+            }
+        }
     }
 }

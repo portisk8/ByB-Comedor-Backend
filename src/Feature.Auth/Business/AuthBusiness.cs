@@ -29,6 +29,11 @@ namespace Feature.Auth.Business
             try
             {
                 var user = await GetUserByUsernameAsync(userLogin.UserName);
+                if(user == null)
+                {
+                    throw new Exception("Usuario no es válido. Verifique el nombre de usaurio y contraseña");
+                }
+
                 var isValid = await ValidateAsync(user, userLogin.Password);
                 if (!isValid)
                     throw new Exception("Usuario no es válido. Verifique el nombre de usaurio y contraseña");

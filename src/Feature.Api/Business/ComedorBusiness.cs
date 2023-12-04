@@ -1,5 +1,6 @@
 ﻿using Feature.Api.Config;
 using Feature.Api.Entities;
+using Feature.Api.Entities.DTOs;
 using Feature.Api.Entities.Filtros;
 using Feature.Api.Repository;
 using Feature.Core.AuthUser;
@@ -36,6 +37,11 @@ namespace Feature.Api.Business
         public async Task<GenericResponse> ComedorCambiarAsync(int comedorId, int userId)
         {
             return await _comedorRepository.ComedorCambiarAsync(comedorId, userId);
+        }
+
+        public async Task<GenericResponse> ComedorGuardarAsync(ComedorDTO dto)
+        {
+            return await _comedorRepository.ComedorGuardarAsync(dto);
         }
     }
 }
